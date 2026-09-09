@@ -6,6 +6,10 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "streamlit>=1.61.1",
+    "matplotlib>=3.7.2",
+    "plotly>=5.17.0",
+    "sympy>=1.14.0",
+    "control>=0.9.2"
 ]
 
 [tool.uv]
