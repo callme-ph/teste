@@ -897,6 +897,7 @@ def lgr_completo(num, den=None, titulo="Lugar Geométrico das Raízes", show_plo
                         ha="left", va="bottom", fontsize=8.5, color="#15803d", fontweight="bold",
                         bbox=dict(boxstyle="round,pad=0.2", facecolor="#f0fdf4", edgecolor="#16a34a", alpha=0.95, lw=0.8))
 
+
     # ========================================================
     # TÍTULOS E LEGENDA FINAL
     # ========================================================
