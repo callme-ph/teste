@@ -595,9 +595,6 @@ def lgr_completo(num, den=None, titulo="Lugar Geométrico das Raízes", show_plo
     Retorna: (fig, ax, detalhes_dos_passos)
     """
 
-    # --------------------------------------------------------
-    # TRATAMENTO DE ENTRADA (Múltiplos formatos)
-    # --------------------------------------------------------
     if isinstance(num, str) and isinstance(den, str):
         # CASO 0: Strings separadas para numerador e denominador
         n_coeffs, d_coeffs, _, _ = parse_tf_parts(num, den)
@@ -626,7 +623,6 @@ def lgr_completo(num, den=None, titulo="Lugar Geométrico das Raízes", show_plo
     else:
         raise ValueError("Entrada inválida! Faltou passar o denominador, ou passe a Função de Transferência direto.")
 
-    # Sobrescreve as variáveis 'num' e 'den' para que elas voltem a ser listas numéricas
     num = [float(c) for c in sys.num[0][0]]
     den = [float(c) for c in sys.den[0][0]]
     
@@ -666,18 +662,15 @@ def lgr_completo(num, den=None, titulo="Lugar Geométrico das Raízes", show_plo
     ax.axhline(0, color='#334155', linewidth=1.2) # Eixo Real
     ax.axvline(0, color='#334155', linewidth=1.2) # Eixo jw
     
-    # ========================================================
-    # PASSO 1, 2 e 3: Ramos, Polos, Zeros e Simetria
-    # ========================================================
     # Traça os ramos
     for i in range(ramos):
         ax.plot(np.real(rlist[:, i]), np.imag(rlist[:, i]), color='#dc2626', linewidth=2.2, 
                 label='Ramos do LGR' if i == 0 else "_nolegend_")
         
-    # Marca polos (x)
+
     ax.plot(np.real(polos), np.imag(polos), 'kx', markersize=9, markeredgewidth=2.2, label='Polos (Início)', zorder=5)
     
-    # Marca zeros (o)
+
     if Z > 0:
         ax.plot(np.real(zeros), np.imag(zeros), 'ko', markerfacecolor='white', markersize=8.5, markeredgewidth=2.2, label='Zeros (Término)', zorder=5)
     else:
@@ -707,7 +700,7 @@ def lgr_completo(num, den=None, titulo="Lugar Geométrico das Raízes", show_plo
                     label='Assíntotas' if k == 0 else "_nolegend_")
 
     # ========================================================
-    # PASSO 5: Pontos de Entrada e Saída (Break-in / Breakaway)
+    # PASSO 5: Pontos de Entrada e Saída
     # ========================================================
     N = np.poly1d(num)
     D = np.poly1d(den)
@@ -898,9 +891,6 @@ def lgr_completo(num, den=None, titulo="Lugar Geométrico das Raízes", show_plo
                         bbox=dict(boxstyle="round,pad=0.2", facecolor="#f0fdf4", edgecolor="#16a34a", alpha=0.95, lw=0.8))
 
 
-    # ========================================================
-    # TÍTULOS E LEGENDA FINAL
-    # ========================================================
     ax.set_title(titulo, fontsize=14, pad=15, fontweight="bold")
     ax.set_xlabel(r'Eixo Real ($\sigma$)', fontsize=11, labelpad=8)
     ax.set_ylabel(r'Eixo Imaginário ($j\omega$)', fontsize=11, labelpad=8)
