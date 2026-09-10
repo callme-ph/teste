@@ -1,8 +1,3 @@
-"""
-Módulo de Cálculo e Plotagem do Lugar Geométrico das Raízes (LGR)
-Implementa rigorosamente os 7 passos clássicos da análise de controle.
-"""
-
 import re
 import numpy as np
 import matplotlib.pyplot as plt
