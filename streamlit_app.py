@@ -1,8 +1,3 @@
-"""
-Interface Web Moderna e Intuitiva para o Lugar Geométrico das Raízes (LGR)
-Desenvolvida com Streamlit.
-"""
-
 import io
 import streamlit as st
 import numpy as np
@@ -312,7 +307,7 @@ else:
 
         if 'ponto_input' in locals() and ponto_input.strip() != "":
             st.markdown("---")
-            st.markdown("### 🎯 Avaliação de Ponto Específico no LGR")
+            st.markdown("### Avaliação de Ponto Específico no LGR")
         
             try:
                 # Tratamento da entrada do usuário (aceita "0.5+1j", "-1.2", "-1+2j", etc.)
