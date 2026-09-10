@@ -60,8 +60,7 @@ col_title, col_badge = st.columns([3, 1])
 with col_title:
     st.markdown('<div class="main-title">Lugar Geométrico das Raízes (LGR)</div>',
                 unsafe_allow_html=True)
-    st.markdown('<div class="sub-title">Calculadora e visualizador interativo completo com execução rigorosa dos 7 passos clássicos da teoria de controle.</div>', unsafe_allow_html=True)
-
+    
 st.sidebar.header("Configuração da Função")
 
 input_mode = st.sidebar.radio(
