@@ -211,7 +211,7 @@ else:
                     st.markdown(
                         f"**Número de Zeros ($Z$):** `{detalhes['Z']}`")
                     if detalhes['Z'] > 0:
-                        zeros_fmt = [format_complex(z)
+                        zeros_fmt = [format_complex(z, 4)
                                      for z in detalhes['zeros']]
                         st.write(f"Zeros em: {', '.join(zeros_fmt)}")
                     else:
@@ -236,12 +236,12 @@ else:
                         f"Como $P > Z$, existem **{P - Z} ramo(s)** que terminam no infinito ao longo de assíntotas.")
                     st.markdown(r"**Centroide das Assíntotas ($\sigma_a$):**")
                     st.latex(
-                        rf"\sigma_a = \frac{{\sum \text{{Polos}} - \sum \text{{Zeros}}}}{{P - Z}} = \frac{{{np.sum(np.real(detalhes['polos'])):.2f} - ({np.sum(np.real(detalhes['zeros'])):.2f})}}{{{P - Z}}} = {detalhes['centroide']:.2f}")
+                        rf"\sigma_a = \frac{{\sum \text{{Polos}} - \sum \text{{Zeros}}}}{{P - Z}} = \frac{{{np.sum(np.real(detalhes['polos'])):.4f} - ({np.sum(np.real(detalhes['zeros'])):.4f})}}{{{P - Z}}} = {detalhes['centroide']:.4f}")
 
                     st.markdown(
                         r"**Ângulos das Assíntotas ($\theta_k$):** $\theta_k = \frac{(2k + 1) \cdot 180^\circ}{P - Z}$")
                     ang_text = ", ".join(
-                        [f"k={a['k']}: **{a['graus']:.1f}°**" for a in detalhes['angulos_assintotas']])
+                        [f"k={a['k']}: **{a['graus']:.4f}°**" for a in detalhes['angulos_assintotas']])
                     st.write(f"Ângulos calculados: {ang_text}")
                 else:
                     st.info(
@@ -254,7 +254,7 @@ else:
                 if detalhes['break_points']:
                     for bp in detalhes['break_points']:
                         st.success(
-                            f"**Ponto no eixo real:** $s = {bp['s']:.3f}$ com ganho correspondente **$K = {bp['K']:.2f}$**")
+                            f"**Ponto no eixo real:** $s = {bp['s']:.4f}$ com ganho correspondente **$K = {bp['K']:.4f}$**")
                 else:
                     st.write(
                         "Nenhum ponto de break-in ou breakaway válido com $K > 0$ no eixo real.")
@@ -271,7 +271,7 @@ else:
                             continue
                         seen_jw.add(key)
                         st.warning(
-                            f"**Cruzamento detectado em:** $s = \pm j{abs(jw['w']):.2f}$ para o Ganho Crítico **$K = {jw['K']:.2f}$**")
+                            f"**Cruzamento detectado em:** $s = \pm j{abs(jw['w']):.4f}$ para o Ganho Crítico **$K = {jw['K']:.4f}$**")
                 else:
                     st.write(
                         "Nenhum cruzamento com o eixo imaginário encontrado na faixa de ganho analisada.")
@@ -288,9 +288,9 @@ else:
                         st.caption(
                             r"Condição angular: $\theta_d = 180^\circ + \sum \angle(p - z_i) - \sum \angle(p - p_j)$")
                         for ap in detalhes['angulos_partida']:
-                            p_str = format_complex(ap['polo'])
+                            p_str = format_complex(ap['polo'], 4)
                             st.info(
-                                f"Polo $p = {p_str}$: **$\\theta_d = {ap['angulo']:.1f}^\\circ$**")
+                                f"Polo $p = {p_str}$: **$\\theta_d = {ap['angulo']:.4f}^\\circ$**")
                     if tem_chegada:
                         st.markdown(
                             r"**Ângulo de Chegada em Zeros Complexos ($\theta_a$):**")
@@ -299,7 +299,7 @@ else:
                         for ac in detalhes['angulos_chegada']:
                             z_str = format_complex(ac['zero'])
                             st.success(
-                                f"Zero $z = {z_str}$: **$\\theta_a = {ac['angulo']:.1f}^\\circ$**")
+                                f"Zero $z = {z_str}$: **$\\theta_a = {ac['angulo']:.4f}^\\circ$**")
                 else:
                     st.write(
                         "A função de transferência não possui polos ou zeros complexos conjugados (todas as singularidades são reais).")
@@ -363,14 +363,14 @@ else:
                         st.markdown("**1. Condição de Ângulo:**")
                         st.latex(
                             r"\angle G(s_0) = \sum \angle(s_0 - z_i) - \sum \angle(s_0 - p_j)")
-                        st.write(f"• Ângulo calculado em $s_0$: **{ang_norm:.2f}°**")
+                        st.write(f"• Ângulo calculado em $s_0$: **{ang_norm:.4f}°**")
         
                         if pertence_lgr:
                             st.success(
-                                f"✅ **Pertence ao LGR!**\n\nO ângulo é aproximadamente $\\pm 180^\\circ$ (Erro: {erro_angulo:.2f}°).")
+                                f"✅ **Pertence ao LGR!**\n\nO ângulo é aproximadamente $\\pm 180^\\circ$ (Erro: {erro_angulo:.4f}°).")
                         else:
                             st.error(
-                                f"❌ **NÃO pertence ao LGR.**\n\nO ângulo difere de $\\pm 180^\\circ$ em {erro_angulo:.2f}°.")
+                                f"❌ **NÃO pertence ao LGR.**\n\nO ângulo difere de $\\pm 180^\\circ$ em {erro_angulo:.4f}°.")
         
                     with col_res2:
                         st.markdown("**2. Condição de Módulo:**")
@@ -389,7 +389,7 @@ else:
         
             except ValueError:
                 st.warning(
-                    "⚠️ Formato de número complexo inválido. Digite no formato ex: `0.5+1j`, `-2`, `-1-2j`.")
+                    "Formato de número complexo inválido. Digite no formato ex: `0.5+1j`, `-2`, `-1-2j`.")
             except Exception as e:
                 st.error(f"Erro ao avaliar ponto: {e}")
 

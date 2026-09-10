@@ -349,8 +349,8 @@ def gerar_passo_a_passo(
         diff_order = P - Z
         s_p = passo_4["soma_polos_num"]
         s_z = passo_4["soma_zeros_num"]
-        s_p_str = f"{s_p:.2f}".rstrip("0").rstrip(".")
-        s_z_str = f"{s_z:.2f}".rstrip("0").rstrip(".")
+        s_p_str = f"{s_p:.4f}".rstrip("0").rstrip(".")
+        s_z_str = f"{s_z:.4f}".rstrip("0").rstrip(".")
         cent_val = (
             float(centroide)
             if centroide is not None
@@ -358,7 +358,7 @@ def gerar_passo_a_passo(
         )
         passo_4["substituicao_centroide"] = (
             rf"\sigma_a = \frac{{({s_p_str}) - ({s_z_str})}}{{{diff_order}}} = "
-            rf"\frac{{{s_p - s_z:.2f}}}{{{diff_order}}} = {cent_val:.3f}"
+            rf"\frac{{{s_p - s_z:.4f}}}{{{diff_order}}} = {cent_val:.4f}"
         )
         for k in range(diff_order):
             deg = ((2 * k + 1) * 180.0) / diff_order
@@ -366,7 +366,7 @@ def gerar_passo_a_passo(
                 "k": int(k),
                 "formula": (
                     rf"\theta_{{{k}}} = \frac{{(2({k}) + 1) \cdot 180^\circ}}{{{diff_order}}} = "
-                    rf"\frac{{{ (2*k+1)*180 }^\circ}}{{{diff_order}}} = {deg:.1f}^\circ"
+                    rf"\frac{{{ (2*k+1)*180 }^\circ}}{{{diff_order}}} = {deg:.4f}^\circ"
                 ),
                 "graus": float(deg % 360),
             })
@@ -392,7 +392,7 @@ def gerar_passo_a_passo(
         r_im = float(np.imag(r))
         if abs(r_im) > 1e-4:
             raizes_analisadas.append({
-                "s_str": f"{r_re:.2f} ± j{abs(r_im):.2f}",
+                "s_str": f"{r_re:.4f} ± j{abs(r_im):.4f}",
                 "tipo": "complexa",
                 "valido": False,
                 "motivo": "Raiz com parte imaginária (fora do eixo real)",
@@ -409,16 +409,16 @@ def gerar_passo_a_passo(
                 no_segmento = bool(count_dir % 2 == 1)
                 if K_calc > 0 and no_segmento:
                     valido = True
-                    motivo = f"Ponto de Quebra Válido ($K = {K_calc:.2f} > 0$ e pertence ao LGR)"
+                    motivo = f"Ponto de Quebra Válido ($K = {K_calc:.4f} > 0$ e pertence ao LGR)"
                 elif K_calc <= 0:
                     valido = False
-                    motivo = f"Descartado: $K = {K_calc:.2f} \\le 0$ (requer ganho positivo)"
+                    motivo = f"Descartado: $K = {K_calc:.4f} \\le 0$ (requer ganho positivo)"
                 else:
                     valido = False
-                    motivo = f"Descartado: ponto $s = {r_re:.2f}$ fora dos ramos reais do LGR"
+                    motivo = f"Descartado: ponto $s = {r_re:.4f}$ fora dos ramos reais do LGR"
 
             raizes_analisadas.append({
-                "s_str": f"{r_re:.3f}",
+                "s_str": f"{r_re:.4f}",
                 "s_val": r_re,
                 "tipo": "real",
                 "K": K_calc,
@@ -451,14 +451,14 @@ def gerar_passo_a_passo(
     for item in jw_cruzamentos:
         w_val = abs(float(item["w"]))
         k_val = float(item["K"])
-        key = f"{w_val:.2f}_{k_val:.2f}"
+        key = f"{w_val:.4f}_{k_val:.4f}"
         if key not in seen:
             seen.add(key)
             cruzamentos_deduzidos.append({
                 "w": w_val,
                 "K": k_val,
-                "s_str": rf"s = \pm j{w_val:.2f}",
-                "K_str": f"K_{{crit}} = {k_val:.2f}",
+                "s_str": rf"s = \pm j{w_val:.4f}",
+                "K_str": f"K_{{crit}} = {k_val:.4f}",
             })
 
     passo_6 = {
@@ -512,7 +512,7 @@ def gerar_passo_a_passo(
             "soma_polos_graus": float(soma_polos_ang),
             "formula_aplicada": r"\theta_d = 180^\circ + \sum \phi_z - \sum \theta_p",
             "calculo_substituicao": (
-                rf"\theta_d = 180^\circ + ({soma_zeros_ang:.1f}^\circ) - ({soma_polos_ang:.1f}^\circ) = {ang_norm:.1f}^\circ"
+                rf"\theta_d = 180^\circ + ({soma_zeros_ang:.4f}^\circ) - ({soma_polos_ang:.4f}^\circ) = {ang_norm:.4f}^\circ"
             ),
             "angulo_final": ang_norm,
         })
@@ -555,7 +555,7 @@ def gerar_passo_a_passo(
             "soma_zeros_graus": float(soma_zeros_ang),
             "formula_aplicada": r"\theta_a = 180^\circ + \sum \phi_p - \sum \theta_z",
             "calculo_substituicao": (
-                rf"\theta_a = 180^\circ + ({soma_polos_ang:.1f}^\circ) - ({soma_zeros_ang:.1f}^\circ) = {ang_norm:.1f}^\circ"
+                rf"\theta_a = 180^\circ + ({soma_polos_ang:.4f}^\circ) - ({soma_zeros_ang:.4f}^\circ) = {ang_norm:.4f}^\circ"
             ),
             "angulo_final": ang_norm,
         })
@@ -678,7 +678,7 @@ def lgr_completo(num, den=None, titulo="Lugar Geométrico das Raízes", show_plo
     if P > Z:
         centroide = float(np.real((np.sum(polos) - np.sum(zeros)) / (P - Z)))
         detalhes["centroide"] = centroide
-        ax.plot(centroide, 0, 'k+', markersize=11, markeredgewidth=2, label=rf'Centroide ($\sigma_a = {centroide:.2f}$)', zorder=6)
+        ax.plot(centroide, 0, 'k+', markersize=11, markeredgewidth=2, label=rf'Centroide ($\sigma_a = {centroide:.4f}$)', zorder=6)
         
         raio = 100
         for k in range(P - Z):
@@ -719,7 +719,7 @@ def lgr_completo(num, den=None, titulo="Lugar Geométrico das Raízes", show_plo
                     break_pts.append((float(np.real(r)), float(K_break)))
 
     for idx, (r_val, K_b) in enumerate(break_pts):
-        lbl = f'Break-in/out (K={K_b:.1f})' if idx == 0 else "_nolegend_"
+        lbl = f'Break-in/out (K={K_b:.4f})' if idx == 0 else "_nolegend_"
         ax.plot(r_val, 0, 's', color='#2563eb', markersize=7, label=lbl, zorder=6)
 
     # ========================================================
@@ -742,7 +742,7 @@ def lgr_completo(num, den=None, titulo="Lugar Geométrico das Raízes", show_plo
                     jw_pts.append((float(w_cruz), float(K_cruz)))
 
     for idx, (w_cruz, K_c) in enumerate(jw_pts):
-        lbl = rf'Cruz. j$\omega$ ($\omega=\pm${abs(w_cruz):.2f}, K={K_c:.1f})' if idx == 0 else "_nolegend_"
+        lbl = rf'Cruz. j$\omega$ ($\omega=\pm${abs(w_cruz):.4f}, K={K_c:.4f})' if idx == 0 else "_nolegend_"
         ax.plot(0, w_cruz, 'o', color='#b91c1c', markerfacecolor='white', markeredgewidth=2, markersize=7, label=lbl, zorder=6)
 
     # ========================================================
@@ -804,7 +804,7 @@ def lgr_completo(num, den=None, titulo="Lugar Geométrico das Raízes", show_plo
 
     # Anotação do Centroide
     if centroide is not None:
-        ax.annotate(rf"Centroide $\sigma_a={centroide:.2f}$", xy=(centroide, 0), xytext=(0, -22), textcoords="offset points",
+        ax.annotate(rf"Centroide $\sigma_a={centroide:.4f}$", xy=(centroide, 0), xytext=(0, -22), textcoords="offset points",
                     ha="center", va="top", fontsize=9, color="#1e293b",
                     bbox=dict(boxstyle="round,pad=0.25", facecolor="#f8fafc", edgecolor="#94a3b8", alpha=0.95, lw=0.7))
 
@@ -819,14 +819,14 @@ def lgr_completo(num, den=None, titulo="Lugar Geométrico das Raízes", show_plo
 
     # Anotações de Break-in / Breakaway
     for r_val, K_b in break_pts:
-        ax.annotate(f"Break: {r_val:.2f}\n(K={K_b:.1f})", xy=(r_val, 0), xytext=(0, 26), textcoords="offset points",
+        ax.annotate(f"Break: {r_val:.4f}\n(K={K_b:.4f})", xy=(r_val, 0), xytext=(0, 26), textcoords="offset points",
                     ha="center", va="bottom", fontsize=8.5, color="#1d4ed8", fontweight="bold",
                     bbox=dict(boxstyle="round,pad=0.25", facecolor="#eff6ff", edgecolor="#3b82f6", alpha=0.95, lw=0.8),
                     arrowprops=dict(arrowstyle="->", color="#3b82f6", lw=1))
 
     # Anotações de Cruzamento com jw
     for w_cruz, K_c in jw_pts:
-        ax.annotate(rf"$j\omega={w_cruz:+.2f}$" + "\n" + rf"K={K_c:.1f}", xy=(0, w_cruz),
+        ax.annotate(rf"$j\omega={w_cruz:+.4f}$" + "\n" + rf"K={K_c:.4f}", xy=(0, w_cruz),
                     xytext=(16, 0), textcoords="offset points",
                     ha="left", va="center", fontsize=8.5, color="#991b1b",
                     bbox=dict(boxstyle="round,pad=0.25", facecolor="#fef2f2", edgecolor="#ef4444", alpha=0.95, lw=0.8),
@@ -856,7 +856,7 @@ def lgr_completo(num, den=None, titulo="Lugar Geométrico das Raízes", show_plo
             arco = Arc((np.real(p), np.imag(p)), 2*arc_r, 2*arc_r, angle=0, theta1=min(0, angulo), theta2=max(0, angulo), color='#7c3aed', lw=1.6)
             ax.add_patch(arco)
             ax.plot([np.real(p)-arc_r*1.2, np.real(p)+arc_r*1.2], [np.imag(p), np.imag(p)], color='#6b7280', linestyle=':', alpha=0.6)
-            ax.annotate(rf"$\theta_d={angulo:.1f}^\circ$", xy=(np.real(p), np.imag(p)),
+            ax.annotate(rf"$\theta_d={angulo:.4f}^\circ$", xy=(np.real(p), np.imag(p)),
                         xytext=(arc_r*14, 10), textcoords="offset points",
                         ha="left", va="bottom", fontsize=8.5, color="#6d28d9", fontweight="bold",
                         bbox=dict(boxstyle="round,pad=0.2", facecolor="#f5f3ff", edgecolor="#8b5cf6", alpha=0.95, lw=0.8))
@@ -880,7 +880,7 @@ def lgr_completo(num, den=None, titulo="Lugar Geométrico das Raízes", show_plo
             arco = Arc((np.real(z), np.imag(z)), 2*arc_r, 2*arc_r, angle=0, theta1=min(0, angulo), theta2=max(0, angulo), color='green', lw=1.6)
             ax.add_patch(arco)
             ax.plot([np.real(z)-arc_r*1.2, np.real(z)+arc_r*1.2], [np.imag(z), np.imag(z)], color='#6b7280', linestyle=':', alpha=0.6)
-            ax.annotate(rf"$\theta_a={angulo:.1f}^\circ$", xy=(np.real(z), np.imag(z)),
+            ax.annotate(rf"$\theta_a={angulo:.4f}^\circ$", xy=(np.real(z), np.imag(z)),
                         xytext=(arc_r*14, 10), textcoords="offset points",
                         ha="left", va="bottom", fontsize=8.5, color="#15803d", fontweight="bold",
                         bbox=dict(boxstyle="round,pad=0.2", facecolor="#f0fdf4", edgecolor="#16a34a", alpha=0.95, lw=0.8))
